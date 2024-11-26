@@ -1,0 +1,20 @@
+services:
+  data-transformer:
+    build: .
+    depends_on:
+      - kafka
+    restart: on-failure:10
+    ports:
+      - 9094:9094
+    environment:
+      BOOTSTRAP_SERVERS: kafka:9092
+      INPUT_TOPIC: user-login
+      OUTPUT_TOPIC: login-metrics
+      BATCH_SIZE_C: 100
+      BATCH_DURATION_S: 10
+    networks:
+      - kafka-network
+
+networks:
+  kafka-network:
+    driver: bridge
